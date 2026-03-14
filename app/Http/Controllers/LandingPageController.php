@@ -118,11 +118,13 @@ class LandingPageController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        $page = LandingPage::firstWhere('user_id', $user->id);
+        $page = LandingPage::firstOrNew(['user_id' => $user->id]);
 
-        if (! $page) {
-            abort(404);
+        if (! $page->slug) {
+            $page->slug = Str::slug($user->name) ?: 'loja-' . $user->id;
         }
+
+        Log::info('landing.update called', ['user_id' => optional($user)->id, 'page_id' => optional($page)->id, 'slug' => $page->slug]);
 
         $validated = $request->validate([
             'banner_title' => 'nullable|string|max:255',
@@ -245,6 +247,7 @@ class LandingPageController extends Controller
         }
 
         $page->save();
+        Log::info('landing.update saved', ['page_id' => $page->id, 'user_id' => $page->user_id, 'slug' => $page->slug, 'background_color' => $page->background_color, 'banner_title_size' => $page->banner_title_size, 'menu_bg_color' => $page->menu_bg_color]);
 
         return redirect()->route('landing.edit')->with('success', 'Landing page atualizada com sucesso.');
     }
@@ -255,10 +258,18 @@ class LandingPageController extends Controller
             return view('welcome');
         }
 
+        if (Auth::check()) {
+            $userPage = LandingPage::where('user_id', Auth::id())->where('is_published', true)->first();
+            if ($userPage) {
+                return view('landing', ['page' => $userPage]);
+            }
+        }
+
         $page = LandingPage::where('is_published', true)->whereNull('user_id')->first();
         if (! $page) {
             return view('welcome');
         }
+
         return view('landing', ['page' => $page]);
     }
 

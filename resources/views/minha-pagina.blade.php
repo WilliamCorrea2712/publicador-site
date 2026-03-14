@@ -1,12 +1,20 @@
 ﻿<x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Minha Página') }}</h2>
-            @if(!empty($page->slug))
-                <a href="{{ route('customer.page', ['slug' => $page->slug]) }}" class="text-sm text-blue-500 hover:text-blue-700">Ver minha página ({{ url('/loja/'.$page->slug) }})</a>
-            @else
-                <a href="{{ route('home') }}" class="text-sm text-blue-500 hover:text-blue-700">Ver página pública</a>
-            @endif
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Minha Página') }}</h2>
+                @if(!empty($page->slug))
+                    <p class="text-xs text-gray-500 mt-1">Slug: <strong>{{ $page->slug }}</strong></p>
+                @endif
+            </div>
+            <div class="flex gap-2 items-center">
+                @if(!empty($page->slug))
+                    <a href="{{ route('customer.page', ['slug' => $page->slug]) }}" class="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-2 py-1 rounded">Ver minha página</a>
+                    <a href="{{ url('/loja/'.$page->slug) }}" target="_blank" class="text-xs text-gray-500">{{ url('/loja/'.$page->slug) }}</a>
+                @else
+                    <a href="{{ route('home') }}" class="text-sm text-blue-500 hover:text-blue-700">Ver página pública</a>
+                @endif
+            </div>
         </div>
     </x-slot>
 
@@ -256,10 +264,25 @@
                         <label class="text-sm text-gray-700">Publicar página (disponível em /)</label>
                     </div>
 
-                    <div class="mt-6">
+                    <div class="mt-6 flex flex-wrap gap-2">
                         <button type="submit" style="background:#2563eb;color:#fff;border:1px solid #1d4ed8;" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700">Salvar Landing Page</button>
+                        @if(!empty($page->slug))
+                            <a href="{{ route('customer.page', ['slug' => $page->slug]) }}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-blue-300 text-blue-700 bg-white hover:bg-blue-50">Abrir preview em nova aba</a>
+                        @endif
                     </div>
                 </form>
+                @if(!empty($page->slug))
+                    <div class="mt-6 p-4 bg-white border border-gray-200 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <h3 class="text-lg font-semibold">Preview ao vivo</h3>
+                                <p class="text-xs text-gray-500">A visualização mostra a mesma página que será vista em <code>/loja/{{ $page->slug }}</code>.</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded bg-green-100 text-green-700">Atualize e clique em "Salvar"</span>
+                        </div>
+                        <iframe id="preview-frame" src="{{ route('customer.page', ['slug' => $page->slug]) }}" class="w-full" style="min-height: 580px; border: 1px solid #d1d5db; border-radius: 0.45rem;"></iframe>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
