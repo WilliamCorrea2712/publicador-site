@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function landingPages()
+    {
+        return $this->hasMany(\App\Models\LandingPage::class);
+    }
+
     public function landingPage()
     {
         return $this->hasOne(\App\Models\LandingPage::class);

@@ -20,8 +20,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('landing.edit');
     })->name('dashboard');
 
-    Route::get('/minha-pagina', [LandingPageController::class, 'edit'])->name('landing.edit');
-    Route::post('/minha-pagina', [LandingPageController::class, 'update'])->name('landing.update');
+    Route::get('/minha-pagina', [LandingPageController::class, 'index'])->name('landing.edit');
+    Route::get('/minha-pagina/criar', [LandingPageController::class, 'create'])->name('landing.create');
+    Route::post('/minha-pagina', [LandingPageController::class, 'store'])->name('landing.store');
+    Route::get('/minha-pagina/{page}/editar', [LandingPageController::class, 'editPage'])->name('landing.page.edit');
+    Route::put('/minha-pagina/{page}', [LandingPageController::class, 'update'])->name('landing.update');
 
     Route::get('/admin/customers', [AdminController::class, 'customers'])->name('admin.customers');
     Route::get('/admin/customers/{customer}', [AdminController::class, 'showCustomer'])->name('admin.customer.show');

@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('landing.edit')" :active="request()->routeIs('landing.edit')">
                         {{ __('Minha Página') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('landing.create')" :active="request()->routeIs('landing.create')">
+                        {{ __('Nova Página') }}
+                    </x-nav-link>
                     @if (Auth::user() && Auth::user()->isAdmin())
                         <x-nav-link :href="route('admin.customers')" :active="request()->routeIs('admin.*')">
                             {{ __('Admin') }}
@@ -77,6 +80,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('landing.edit')" :active="request()->routeIs('landing.edit')">
+                {{ __('Minha Página') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('landing.create')" :active="request()->routeIs('landing.create')">
+                {{ __('Nova Página') }}
             </x-responsive-nav-link>
             @if (Auth::user() && Auth::user()->isAdmin())
                 <x-responsive-nav-link :href="route('admin.customers')" :active="request()->routeIs('admin.*')">

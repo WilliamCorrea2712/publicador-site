@@ -52,12 +52,14 @@ class LandingPage extends Model
         'footer_email',
         'footer_phone',
         'plans',
+        'content_blocks',
         'is_published',
     ];
 
     protected $casts = [
         'menu_items' => 'array',
         'plans' => 'array',
+        'content_blocks' => 'array',
         'is_published' => 'boolean',
     ];
 
